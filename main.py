@@ -32,7 +32,10 @@ CAM = [1000,0,0]
 PLANE_POSITIONS = [[0,400,600], [0,400,0],[0,-400,0], [0,-400,600]]
 P1 = [125, -350, 75]
 P2 = [650, -25, 210]
-
+PROJP1 = [0,-400, 600/7]
+PROJP2 = [0,-500/7,600]
+box_config = {"fill_opacity": 0.25, "stroke_width": 0}
+label_config = {"stroke_width":0}
 
 def pointstr(array3d):
     return f"({array3d[0]},{array3d[1]},{array3d[2]})"
@@ -77,8 +80,7 @@ class Q1(ThreeDScene):
         dotL1 = Dot3D(axes.c2p(*L1), color=RED, radius=0.08)
         dotL2 = Dot3D(axes.c2p(*L2), color=RED, radius=0.08)
         
-        box_config = {"fill_opacity": 0.25, "stroke_width": 0}
-        label_config = {"stroke_width":0}
+
         label1 = Label(MathTex(pointstr(L1)), box_config=box_config, label_config=label_config).next_to(dotL1, OUT).scale(0.7)
         label2 = Label(MathTex(pointstr(L2)), box_config=box_config, label_config=label_config).next_to(dotL2, OUT).scale(0.7)
 
@@ -242,7 +244,137 @@ class Q1(ThreeDScene):
         
 
 
+class Q2(ThreeDScene):
+    def div(self, ovr=False):
+        if SECTION_DIV:
+            if ovr:
+                self.next_section()                
+            elif SKIP_ANIM:
+                self.next_section(skip_animations=True)
+        else:
+            self.wait(1)
+    
+    def construct(self):
+        self.div()
+
+        # make axes and axes labels and draw
+        axes = ThreeDAxes((-200, 1000, 100), (-1000, 1000, 100), (-1000, 1000,100))
+        labels = axes.get_axis_labels(
+            Text("x").scale(0.7), Text("y").scale(0.45), Text("z").scale(0.45)
+        )
+
+        # add previous objects
+        plane_positions = axes.coords_to_point(PLANE_POSITIONS)
+        plane = Polygon(*plane_positions, color=BLUE, fill_opacity=1)
         
+        self.add(axes, labels)
+        self.add(plane)
+        cam_dot = Dot3D(axes.c2p(*CAM), color=YELLOW, radius=0.08)
+        cam_label = Label(MathTex(pointstr(CAM)), box_config=box_config, label_config=label_config).next_to(cam_dot, OUT).scale(0.6)
+        
+        clipP1 = Dot3D(axes.c2p(*P1), color=GREEN, radius=0.06)
+        clipP2 = Dot3D(axes.c2p(*P2), color=GREEN, radius=0.06)
+        label1 = Label(MathTex(pointstr(P1)), box_config=box_config, label_config=label_config).next_to(clipP1, OUT).scale(0.65)
+        label2 = Label(MathTex(pointstr(P2)), box_config=box_config, label_config=label_config).next_to(clipP2, OUT).scale(0.6)
+        l_mid = ParametricFunction(
+            lambda t: axes.coords_to_point(630* t + 230, 390* t -285, 162*t + 102),
+            [-1/6,2/3 + 0.005],
+            dt=0.2
+        )
+
+        self.set_camera_orientation(80 * DEGREES, 45*DEGREES, 0)
+        self.add_fixed_orientation_mobjects(label1, label2, cam_label)
+        self.play(Create(axes), Create(labels), Create(plane), Create(cam_label), Create(clipP1), Create(clipP2), Create(label1), Create(label2), Create(l_mid), Create(cam_dot))
+        self.div()
+
+        self.move_camera(85*DEGREES, -40*DEGREES,0, zoom=1.3,
+                         added_anims=[plane.animate.set_fill(opacity=0)])
+        self.div()
+
+        target_arrow = Arrow3D(cam_dot.get_center(), clipP1.get_center(), color=YELLOW)
+        start_arrow = Line3D(axes.c2p(*CAM), axes.c2p(*CAM), color=YELLOW)
+        self.play(Transform(start_arrow, target_arrow))
+        self.div()
+
+        p1 = axes.c2p(*PROJP1)
+        p2 = axes.c2p(*PROJP2)
+        l_proj_para = lambda t: (1 - t) * p1 + t * p2
+        proj_dot = Dot3D(p1, color=YELLOW, radius=0.07)
+        time = ValueTracker(0)
+        proj_dot.add_updater(
+            lambda m: m.move_to(l_proj_para(time.get_value()))
+        )
+        target_arrow = Arrow3D(axes.c2p(*CAM), axes.c2p(*P2), color=YELLOW)
+        
+        self.play(GrowFromCenter(proj_dot))
+        self.play(Transform(start_arrow, target_arrow), time.animate.set_value(1), TracedPath(proj_dot, stroke_color=YELLOW, dissipating_time=0.2))
+        self.div()        
+
+        self.move_camera(2*DEGREES, -45*DEGREES, 0, zoom=1.0, added_anims=[FadeOut(label1), FadeOut(label2)])
+        self.div()
+
+        x_plane_label = Label(MathTex(r"x = 0"), box_config=box_config, label_config=label_config).next_to(plane, RIGHT).scale(1)
+        v1_label = Label((r"\vec{v_{1}}"), box_config=box_config, label_config=label_config).next_to(target_arrow, OUT + UP).scale(1)
+        self.add_fixed_orientation_mobjects(x_plane_label, v1_label)
+        self.play(Write(x_plane_label), Write(v1_label))
+        self.div()
+
+        target_arrow = Arrow3D(axes.c2p(*CAM), proj_dot.get_center(), color=YELLOW)
+        proj_dot_label = Label(pointstr(P2), box_config=box_config, label_config=label_config).next_to(proj_dot, OUT).scale(0.6)
+        self.add_fixed_orientation_mobjects(proj_dot_label)
+        self.play(Transform(start_arrow, target_arrow), ReplacementTransform(x_plane_label, v1_label), FadeOut(x_plane_label), FadeOut(v1_label), Write(proj_dot_label))
+        self.div()
+
+        proj_dot_2 = Dot3D(p1, color=YELLOW, radius=0.07) 
+        start_arrow_2 = Arrow3D(axes.c2p(*CAM), axes.c2p(*CAM), color=YELLOW)
+        target_arrow_2 = Arrow3D(axes.c2p(*CAM), p1, color=YELLOW)
+        proj_dot_label_2 = Label(pointstr(P1), box_config=box_config, label_config=label_config).next_to(proj_dot_2, OUT).scale(0.6)
+        self.add_fixed_orientation_mobjects(proj_dot_label_2)
+        self.play(GrowFromCenter(proj_dot_2), Transform(start_arrow_2, target_arrow_2), Write(proj_dot_label_2))
+        self.div()
+
+        self.move_camera(88*DEGREES, -15*DEGREES,0, zoom=1.6, added_anims=[FadeOut(start_arrow), FadeOut(start_arrow_2)])
+        self.div()
+
+        l_proj = Line3D(axes.c2p(*PROJP1), axes.c2p(*PROJP2), color=YELLOW)
+        self.play(GrowFromCenter(l_proj), FadeOut(proj_dot_label), FadeOut(proj_dot_label_2), FadeOut(cam_label))
+        self.div(True)
+
+        target_arrow = Arrow3D(cam_dot.get_center(), p1, color=RED)
+        start_arrow = Line3D(axes.c2p(*CAM), axes.c2p(*CAM), color=RED)
+        self.play(Transform(start_arrow, target_arrow))
+        self.play(Flash(proj_dot_2))
+        self.wait(0.25)
+        # Rainbow colors as RGB
+        rainbow_colors = [RED, ORANGE, YELLOW, GREEN, BLUE, PINK]
+        # ValueTracker from 0 to 1
+        t_tracker = ValueTracker(0)
+        # Function to interpolate between two colors
+        def interpolate_colors(colors, t):
+            n = len(colors) - 1
+            # Map t in [0,1] to interval between colors
+            t_scaled = t * n
+            i = int(np.floor(t_scaled))
+            frac = t_scaled - i
+            if i >= n:
+                return colors[-1]
+            return interpolate_color(colors[i], colors[i+1], frac)
+        
+        target_arrow = Arrow3D(axes.c2p(*CAM), p2, color=RED)
+        target_arrow.add_updater(
+            lambda m: m.set_color(interpolate_colors(rainbow_colors, t_tracker.get_value()))
+        )
+        start_arrow.add_updater(
+            lambda m: m.set_color(interpolate_colors(rainbow_colors, t_tracker.get_value()))
+        )
+
+        self.play(t_tracker.animate.set_value(1), Transform(start_arrow, target_arrow), run_time=2)
+        self.play(Flash(proj_dot))
+
+
+
+
+
 
 
 
