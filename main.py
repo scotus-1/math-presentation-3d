@@ -23,8 +23,8 @@ def get_normal_vec(plane: Polygon) -> Arrow3D:
     return Arrow3D(total, direction, base_radius=0.03, thickness=0.005, color=RED)
 
 
-SECTION_DIV = False;
-SKIP_ANIM = True;
+SECTION_DIV = True;
+SKIP_ANIM = False;
 
 L1 = [230,-285,105]
 L2 = [860,105,264]
@@ -48,6 +48,7 @@ class Q1(ThreeDScene):
                 self.next_section()                
             elif SKIP_ANIM:
                 self.next_section(skip_animations=True)
+            self.next_section() 
         else:
             self.wait(1)
 
@@ -251,6 +252,7 @@ class Q2(ThreeDScene):
                 self.next_section()                
             elif SKIP_ANIM:
                 self.next_section(skip_animations=True)
+            self.next_section() 
         else:
             self.wait(1)
     

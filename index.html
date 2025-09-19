@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>the rendering equation</title>
+		<title>math 3d persepctive</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -67,7 +67,14 @@
 			.fragment.blur.visible {
 				filter: none;
 			}
+.reveal .fragment.highlight-yellow.visible {
+	background: yellow;
+}
 
+.reveal .fragment.highlight-current-yellow, .reveal .fragment.highlight-yellow {
+	opacity: 1;
+	visibility: inherit;
+}
 			.img-pixel { 
 				image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
 				image-rendering: -moz-crisp-edges;          /* Firefox                        */
@@ -90,180 +97,151 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section data-auto-animate>
-					<h2>the rendering equation</h2>
-					<h3>what's in a image?</h3>
-					<p>by titus nguyen</p>
-				</section>
-			
-				<section data-auto-animate>
-					<h2>the rendering equation</h2>
-					<img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Rendering_eq.png">
-					<p>$L_{\text{o}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = L_{\text{e}}(\mathbf x, \omega_{\text{o}}, \lambda, t) + L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t)$ </p>
-					<p data-id="eq">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = {\int_\Omega} f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t) L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t) (\omega_{\text{i}}\cdot\mathbf n) \operatorname d \omega_{\text{i}}$</p>
-				</section>		
-				
-				<section data-auto-animate data-transition="fade-out">
-					<p style="font-size: 100%;">light out = the continuous sum of every reflected light ray inside the hemisphere</p>
-					<p style="font-size: 125%;" data-id="eq">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = {\Large\color{red} \int_\Omega} f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t) L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t) (\omega_{\text{i}}\cdot\mathbf n) \operatorname d \omega_{\text{i}}$</p>
-					<ul>
-						<li style="font-size: 125%;" class="fragment">$f_{\text{r}}$ = bidirectional reflectance distribution function</li>
-						<li style="font-size: 125%;" class="fragment">$L_{\text{i}}$ = intensity/color of the incident light</li>
-						<span style="font-size: 125%;" class="fragment"><li class="fragment fade-out">$(\omega_{\text{i}}\cdot\mathbf n)$ = smearing of light flux</li></span>
-					</ul>
-
-				</section>
-
 				<section data-auto-animate data-transition="fade">
-					<h2 data-id="eq2">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)$</h2>
-				</section>
-
-				<section data-auto-animate data-transition="fade">
-					<h2 style="font-size: 100%;" data-id="eq2">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)$</h2>
-					<img style="height: 800px; width: auto;" src="assets/reflectance.png">
-				</section>
-				
-				<section data-auto-animate data-transition="slide">
-					<h2 data-id="eq3">what is a $f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t)$?</h2>
-				</section>
-
-				<section data-auto-animate data-transition="slide">
-					<h2 style="font-size: 100%;" data-id="eq3">what is a $f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t)$?</h2>
-					<img style="height: 800px; width: auto;" src="assets/brdfs.png">
-					<p><small>ref: Cook and Torrence, 1982</small></p>
-				</section>
-				
-
-				<section data-auto-animate>
-					<h2 style="font-size: 120%;" data-id="eq2">what is our $f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t)$?</h2>
-					<img src="https://raytracing.github.io/images/fig-1.10-random-vec-horizon.jpg">
-					<p><small>ref: Shirley, 2018</small></p>
-				</section>
-
-				<section data-auto-animate>
-					<div class="container">
-						<div class="column">
-							<img src="https://raytracing.github.io/images/fig-1.10-random-vec-horizon.jpg">
-						</div>
-						<div class="column" style="flex: 1.5;">
-							<p style="font-size: 125%;">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = {\int_\Omega} f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t) L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t) \operatorname d \omega_{\text{i}}$</p>
-							<br>
-							<p style="font-size: 125%;" class="fragment">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = \frac{1}{\Omega_n}\sum_{n=1}^{\Omega} c L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)$</p>
-
-						</div>
-					</div>
-				</section>
-
-				<section data-auto-animate data-transition="zoom">
-					<h2>RECALL</h2>
-					<p style="font-size: 140%;" data-id="eq">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = {\int_\Omega} f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t) L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t) {\Large\color{red}(\omega_{\text{i}}\cdot\mathbf n)} \operatorname d \omega_{\text{i}}$</p>
-				</section>
-
-				<section data-auto-animate data-transition="zoom">
-					<h2>RECALL</h2>
-					<p data-id="eq">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = {\int_\Omega} f_{\text{r}}(\mathbf x, \omega_{\text{i}}, \omega_{\text{o}}, \lambda, t) L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t) {\Large\color{red}(\omega_{\text{i}}\cdot\mathbf n)} \operatorname d \omega_{\text{i}}$</p>
-					<img style="width: 800px; height: auto;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Lambert_Cosine_Law_1.svg/1280px-Lambert_Cosine_Law_1.svg.png">
-				</section>
-
-
-
-				<section data-auto-animate="">
-					<div class="container">
-						<div class="column">
-							<img style="width: 800px; height: auto;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Lambert_Cosine_Law_1.svg/1280px-Lambert_Cosine_Law_1.svg.png">
-						</div>
-						<div class="column" style="flex: 1.5;">
-							<p class="fragment semi-fade-out" style="font-size: 125%;">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = \frac{1}{\Omega_n}\sum_{n=1}^{\Omega} c L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)$</p>
-							<br>
-							<p class="fragment" style="font-size: 125%;">$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = \frac{1}{\Omega_n}\sum_{n=1}^{\Omega} c L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)(\omega_{\text{i}}\cdot\mathbf n)$</p>
-						</div>
-					</div>
-				</section>
-
-				<section data-auto-animate>
-					<p>$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = \frac{1}{\Omega_n}\sum_{n=1}^{\Omega} c L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)(\omega_{\text{i}}\cdot\mathbf n)$ = </p>
-					<img class="r-stretch" src="assets/image-1920-diffuse.png">
-					<p>perfectly cloudy, blue sky; two perfectly diffuse surfaces</p>
+					<h1>$\vec{p}rojection$</h2>
+					<h2>putting 3D in perspective</h2>
+					<p>by andrew wu, grace zhang, titus nguyen</p>
 				</section>
 				
 				<section data-auto-animate>
-					<p>$L_{\text{r}}(\mathbf x, \omega_{\text{o}}, \lambda, t) = \frac{1}{\Omega_n}\sum_{n=1}^{\Omega} c L_{\text{i}}(\mathbf x, \omega_{\text{i}}, \lambda, t)(\omega_{\text{i}}\cdot\mathbf n)$ = </p>
-					<img class="r-stretch" src="assets/image-1920-diffuse.png">
-					<h2>what's in a image?</h2>
-
-				</section>
-				
-				<section data-auto-animate data-transition="fade-out">
-					<h3>1920 x 1080 x 500 rays/pxl x 500 rays/ray</h3>
-					<img class="r-stretch" src="assets/image-1920-diffuse.png">
-					<h2>what's in a image?</h2>
+					<h2>putting 3D in perspective</h2>
+					<h3>question 1:</h3>
+					<p data-fragment-index="1" class="fragment" style="font-size: 125%;">Suppose the screen is represented by a <span data-fragment-index="2" class="fragment highlight-blue">rectangle</span> in the yz-plane with vertices <span data-fragment-index="2" class="fragment highlight-blue">(0,±400, 0) and (0,±400,600)</span>, and the <span data-fragment-index="3" class="fragment highlight-yellow">camera</span> is placed at <span data-fragment-index="3" class="fragment highlight-yellow">(1000,0,0)</span>. A line <span data-fragment-index="4" class="fragment highlight-red">L</span> in the scene passes through the points <span data-fragment-index="4" class="fragment highlight-red">(230,-285,102) and (860,105,264)</span>. <br><br> <span data-fragment-index="5" class="fragment">At what points should L be clipped by the clipping planes?</span></p>
 				</section>
 
-				<section  data-auto-animate data-transition="zoom">
-					<h3 class="r-fit-text" data-id="big">5.2 billion rays</h3>
+				<section data-background-color="black"></section>
+			<!--paste q1 here!-->
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0000_unnamed.mp4" data-autoplay data-preload data-transition="none"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0001_unnamed.mp4" data-autoplay data-preload></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0002_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0003_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0004_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0005_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0006_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0007_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0008_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0009_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0010_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0011_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0012_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0013_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0014_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0015_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0016_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0017_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0018_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0019_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0020_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q1_0021_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+
+				<section data-background-color="black" data-transition="fade">
+					<h3 style="color: #F0F1EB;">question 2 & 3:</h3>
+					<p style="font-size: 125%; color: #F0F1EB;" class="fragment">If the clipped line segment is projected on the screen window, identify the resulting line segment.</p>
+					<p style="font-size: 125%; color: #F0F1EB;" class="fragment">Add sight lines connecting to the viewpoint to each end of the clipped segments to verify that the projection is correct.</p>
+				</section>
+			<!--paste q2 here!-->
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0000_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0001_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0002_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0003_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0004_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0005_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0006_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0007_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0008_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0009_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+<section data-background-video="./media/videos/main/1080p60/sections/Q2_0010_unnamed.mp4" data-autoplay data-preload data-background-color="black"></section>
+
+				<section data-background-color="black">
+					<h3 style="color: #F0F1EB;">question 4:</h3>
+					<p style="font-size: 125%; color: #F0F1EB;">A <span data-fragment-index="2" class="fragment highlight-green">rectangle</span> with vertices <span data-fragment-index="2" class="fragment highlight-green">(621,-147,206), (563,31,242), (657,-111,86), and (599,67,122)</span> is added to the scene. Identify the portion of that should be removed.</p>
 				</section>
 
-				<section data-auto-animate>
-					<h3 style="font-size: 300%;" data-id="big">5.2 billion rays</h3>
-					<p style="font-size: 175%;" class="fragment"> x 1,000,000,000 operations per ray per frame</p>
-					<p style="font-size: 175%;" class="fragment"> x 24 frames per second</p>
-					<p style="font-size: 175%;" class="fragment"> x 60 seconds per minute</p>
-					<p style="font-size: 175%;" class="fragment"> x 90 minutes per movie</p>
-					<h2 style="font-size: 175%;" class="fragment"><b>= $6.7 \times 10^{23}$ operations per movie</b></h2>
+				<section data-background-color="black" data-auto-animate>
+					<h3>animation budget</h3>
 				</section>
 
-				<section data-auto-animate>
-					<h2><b>= $6.7 \times 10^{23}$ operations per movie</b></h2>
-					<div class="container">
-						<div class="column">
-							<img src="https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/graphic-cards/50-series/rtx-5090/geforce-rtx-5090-af550-t.jpg">
-						</div>
-						<div class="column">
-							<h2>NVIDIA RTX 5090</h2>
-							<ul style="font-size: 150%;">
-								<li class="fragment">$2000 (not including electricity)</li>
-								<li class="fragment">$10^{14}$ operations per second</li>
-							</ul>
-						</div>
-					</div>
+				<section data-background-color="black" data-auto-animate>
+					<h3>animation budget</h3>
+					<h1>&#129335;</h1>
 				</section>
 
-				<section data-auto-animate>
-					<h2><b>= $6.7 \times 10^{23}$ operations per movie</b></h2>
-					<div class="container">
-						<div class="column">
-							<img src="https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/graphic-cards/50-series/rtx-5090/geforce-rtx-5090-af550-t.jpg">
-						</div>
-						<div class="column">
-							<h2>NVIDIA RTX 5090</h2>
-							<ul style="font-size: 150%;">
-								<li>$2000 (not including electricity)</li>
-								<li>$10^{14}$ operations per second</li>
-							</ul>
-						</div>
-					</div>
-					<h1>190 years to render!</h1>
+				<section data-state="dataControls" data-preload data-background-iframe="https://www.desmos.com/3d/hjrm9uvnhc"></section> 
+				<section>
+					<h1>
+						thank you!
+					</h1>
 				</section>
 
 				<section>
-					<h3 ><span data-fragment-index="1" class="fragment semi-fade-out">"After 6 months the Lightspeed and RenderMan team had a system that gives the effect of millions of lights and took the notional render time on the complex shots down from 10000 hours to 450 hours. The team continued and reduced this further to 125 hours and finally 75 hours a frame. With some additional work on the way the production team worked with the lighting in shots,</span> <span data-fragment-index="1" class="fragment highlight-red">the final per frame time at the end of production was just 50 hours per frame."</span></h2>
-					<h3><i>- Pixar, 2018</i></h3>
+					<h2>references!</h2>
+						<ul>
+							<li>[1] James Stewart. AP Edition Calculus 7th Edition. Brooke/Cole Cengage Learning, 2012.
+url: https://www.stewartcalculus.com/.</li>
+							<li>[2] Eli Luberoff. Desmos Graphing Calculator. Used for visualizations. url:
+https://www.desmos.com/.</li>
+							<li>[3] Andrew Wu. “AI-Powered Embodied Avatars in Retail Environments”. Unpublished
+manuscript on file with the author. 2025.</li>
+							<li>[4] Dan Scott. The Ultimate Guide To One Point Perspective. accessed on September 7, 2025.
+url: https://drawpaintacademy.com/the-ultimate-guide-to-one-point-perspective.</li>
+						</ul>
+					<img style="width: 30%;" src="https://i.imgur.com/Y0kR59Q.jpeg">
 				</section>
 
-				<section>
-					<h1>190 hrs &lt; <span style="color: red;">739 yrs</span></h1>
-				</section>
+			<section>
 
-
-				<section>
-					<img style="width: 800px; height: auto;" src="http://pixarteam3.pbworks.com/f/1323040827/rtuk_feature_pixar_20.jpg">
-					<img style="width: 1200px; height: auto;" src="https://assets.renderman.pixar.com/Coco/Fxguide_Coco/coco1.jpg">
-				</section>
-
-				<section data-transition="fade">
-					<h3>thank you</h3>
-				</section>
-			
+				<div class="container">
+					<div class="column">
+						<img style="width: 300px; height: auto;" src="https://i.imgur.com/Vfd1DL9h.jpg">
+					</div>
+					<div class="column">
+						<img style="width: 300px; height: auto;" src="https://revealjs.com/images/logo/reveal-black-text.svg">
+					</div>	
+					<div class="column">
+						<img style="width: 300px; height: auto;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaTeX_logo.svg/1280px-LaTeX_logo.svg.png">
+					</div>		
+					<div class="column">
+						<img style="width: 300px; height: auto;"src="https://images.ctfassets.net/nrgyaltdicpt/451Wbu94Q1X3M5QIk74QLL/08e42061e965fb152a329ded74cdc3ce/overleaf-o-logo-primary.svg">
+					</div>		
+					<div class="column">
+						<img style="width: 300px; height: auto;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Manim_icon.svg/2560px-Manim_icon.svg.png">
+					</div>			
+				</div>
+			</section>
 			</div>
 			</div>
 		</div>
@@ -282,9 +260,14 @@
 				width: 1920,
 				height: 1080,
 				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealZoom]
+				plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealZoom],
+				controls: false,
+				viewDistance: 3
 			});
-		
+
+			Reveal.addEventListener( 'dataControls', function() {
+			Reveal.configure({controls:true});
+			}, false ); 
 
 		</script>
 	</body>
