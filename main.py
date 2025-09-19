@@ -320,7 +320,7 @@ class Q2(ThreeDScene):
         self.div()
 
         target_arrow = Arrow3D(axes.c2p(*CAM), proj_dot.get_center(), color=YELLOW)
-        proj_dot_label = Label(pointstr(P2), box_config=box_config, label_config=label_config).next_to(proj_dot, OUT).scale(0.6)
+        proj_dot_label = Label(MathTex(r"(0, \frac{-500}{7}, 600)"), box_config=box_config, label_config=label_config).next_to(proj_dot, OUT).scale(0.6)
         self.add_fixed_orientation_mobjects(proj_dot_label)
         self.play(Transform(start_arrow, target_arrow), ReplacementTransform(x_plane_label, v1_label), FadeOut(x_plane_label), FadeOut(v1_label), Write(proj_dot_label))
         self.div()
@@ -328,7 +328,7 @@ class Q2(ThreeDScene):
         proj_dot_2 = Dot3D(p1, color=YELLOW, radius=0.07) 
         start_arrow_2 = Arrow3D(axes.c2p(*CAM), axes.c2p(*CAM), color=YELLOW)
         target_arrow_2 = Arrow3D(axes.c2p(*CAM), p1, color=YELLOW)
-        proj_dot_label_2 = Label(pointstr(P1), box_config=box_config, label_config=label_config).next_to(proj_dot_2, OUT).scale(0.6)
+        proj_dot_label_2 = Label(MathTex(r"(0, -400, \frac{600}{7})"), box_config=box_config, label_config=label_config).next_to(proj_dot_2, OUT).scale(0.6)
         self.add_fixed_orientation_mobjects(proj_dot_label_2)
         self.play(GrowFromCenter(proj_dot_2), Transform(start_arrow_2, target_arrow_2), Write(proj_dot_label_2))
         self.div()
